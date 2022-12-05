@@ -1,13 +1,23 @@
+//using express (node js web application framework)
+const express = require("express");
+const fs = require("fs");
+const https = require("https");
+const app = express();
+const server = https.createServer({
+    key: fs.readFileSync("key.pem"),
+    cert: fs.readFileSync("cert.pem"),
+},
+    app
+);
+app.use(express.json());
+app.use(express.static('public'))
+
 //open websocket server port 3333
 const wsServer = require('ws').Server;
 const py = new wsServer({ port: process.env.websocketPORT});
 console.log('Server opened on port 3333.');
 
-//using express (node js web application framework)
-const express = require("express");
-const app = express();
-app.use(express.json());
-app.use(express.static('public'))
+
 
 //set router
 const appRoutes = require("./route");
@@ -47,6 +57,6 @@ py.on('connection', (client) => { //server connected -> execute function
 app.use("/api", appRoutes);
 
 //open http port 8081
-app.listen(process.env.PORT, ()=>{
+server.listen(process.env.PORT, ()=> {
     console.log("listening on port 8081");
 })
