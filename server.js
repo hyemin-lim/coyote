@@ -12,10 +12,9 @@ const server = https.createServer({
 app.use(express.json());
 app.use(express.static('public'))
 
-//open websocket server port 3333
+//open websocket server
 const wsServer = require('ws').Server;
-const py = new wsServer({ port: process.env.websocketPORT});
-console.log('Server opened on port 3333.');
+const py = new wsServer({ server: server});
 
 
 
